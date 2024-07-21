@@ -1,0 +1,140 @@
+import React,{useState} from "react";
+import "./style.css";
+
+export default function App() {
+  const [details,setDetails]=useState({
+    name:'',
+    password:'',
+    email:'',
+    gender:'',
+    genderRadio:''
+  })
+  const [error,setError]=useState({
+    name:false,
+    password:false,
+    email:false,
+    gender:false,
+    genderRadio:false
+  });
+  const [erormsg,setErormsg]=useState('')
+  const handleChange=(e)=>{
+    const {name,value}=e.target
+    setDetails(pre=>({
+      ...pre,
+      [name]:value
+    }))
+  }
+  const isValidEmail=(email)=>{
+    const pattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email)
+  }
+  const ispaswordValid=(password)=>{
+    const pattern=/^[0-9a-zA-Z \-'_]+$/
+    return pattern.test(password)
+  }
+  // const submit=(e)=>{
+
+  //   e.preventDefault()
+    
+  //   if(!isValidEmail(details.email)){
+  //     alert("ki")
+  //     setError((pre)=>({
+  //       ...pre,
+  //       'email':true
+  //     }))
+     
+  //   }
+  //   if(!ispaswordValid(details.password)){
+  //     setError((pre)=>({
+  //       ...pre,
+  //       'password':true
+  //     }))
+  //   }
+  //   if(!error.name && !error.email && !error.password){
+  //     setError(pre=>({
+  //       email:false,
+  //       password:false,
+  //       name:false
+  //     }))
+  //     console.log(details)
+  //   }
+    
+  // }
+  const submit = (e) => {
+    e.preventDefault();
+  
+    let nameError=false;
+    let emailError=false;
+    let passwordError=false;
+    let genderError=false;
+    let genderRadioError=false;
+if(!details.email){
+  emailError=true;
+  setErormsg("not empty")
+}
+    else if(!isValidEmail(details.email)){
+      emailError=true;
+      setErormsg("invalid")
+    }
+    if(!ispaswordValid(details.password)){
+      passwordError=true;
+    }
+    if(details.gender==""){
+genderError=true
+    }
+    if(details.genderRadio==""){
+genderRadioError=true
+    }
+    setError({
+      name:nameError,
+      email:emailError,
+      password:passwordError,
+      gender:genderError,
+      genderRadio:genderRadioError
+    })
+    if(!nameError && !emailError && !passwordError && !genderError && !genderRadioError){
+     console.log(details) 
+    }
+  };
+  return (
+    <div>
+      <h1>Hello StackBlitz!</h1>
+      <p>Start editing to see some magic happen :)</p>
+      <form>
+      <div>
+        <label>username</label><br/>
+        <input type="text" name="name" value={details.name} onChange={handleChange}/>
+      </div>
+      <div>
+        <label>Email</label><br/>
+        <input type="email" name="email" value={details.email} onChange={handleChange} className={`${error.email?'error-email':''}`}/>
+        {error.email&&<p>{erormsg}</p>}
+      </div>
+      <div>
+        <label>Password</label><br/>
+        <input type="password" name="password" value={details.password} onChange={handleChange} className={`${error.password?'error-email':''}`}/>
+      </div>
+      <div>
+        <label>Gender</label><br/>
+        <select name="gender" value={details.gender} onChange={handleChange}className={`${error.gender?'error-email':''}`}>
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="others">Others</option>
+        </select>
+      </div>
+      <div>
+        <label>gender</label><br/>
+        <label>
+            <input type="radio" name="genderRadio" value="male" checked={details.genderRadio === 'male'} onChange={handleChange} /> Male
+          </label>
+          <label>
+            <input type="radio" name="genderRadio" value="female" checked={details.genderRadio==='female'} onChange={handleChange} />Female
+          </label>
+          {error.genderRadio && <p>Please select one</p>}
+      </div>
+      <button type="submit" onClick={submit}>click</button>
+       </form>
+    </div>
+  );
+}
